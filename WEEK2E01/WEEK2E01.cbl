@@ -32,7 +32,7 @@
            05  SPACE-X1        PIC X(02) VALUE SPACES.
            05  PRINT-TODAY     PIC 9(08).
            05  SPACE-X2        PIC X(02) VALUE SPACES.
-           05  PRINT-DIFF      PIC 9(08).
+           05  DAY-DIFF      PIC 9(08).
       *
        FD  ACCT-REC RECORDING MODE F.
        01  ACCT-FIELDS.
@@ -43,6 +43,7 @@
            05  ACCT-TODAY      PIC 9(08).
       *
        WORKING-STORAGE SECTION.
+       01 EXIT-FLAG            PIC X(1) VALUE 'N'.
        01  FILE-FLAGS.
            05 PRT-ST           PIC 9(02).
               88 PRT-SUCCESS   VALUE 00 97.
@@ -61,16 +62,16 @@
        FILE-OPEN-CONTROL.
            OPEN INPUT  ACCT-REC.
            IF ACCT-SUCCESS
-             OPEN OUTPUT PRINT-LINE
-              IF NOT ACCT-SUCCESS
-               DISPLAY 'Output-File cannot be opened RC: ' ACCT-ST
-               MOVE ACCT-ST TO RETURN-CODE
-               GO TO PROGRAM-EXIT
-              END-IF
+            OPEN OUTPUT PRINT-LINE
+             IF NOT PRT-SUCCESS   
+              DISPLAY 'Output-File cannot be opened RC: ' PRT-ST
+              MOVE 'Y' TO EXIT-FLAG
+              PERFORM PROGRAM-EXIT
+             END-IF
            ELSE
             DISPLAY 'Input-File cannot be opened RC: ' ACCT-ST
-            MOVE ACCT-ST TO RETURN-CODE
-            GO TO PROGRAM-EXIT
+            MOVE 'Y' TO EXIT-FLAG
+            PERFORM PROGRAM-EXIT
            END-IF.
        FILE-OPEN-CONTROL-END. EXIT.
       *----
@@ -79,8 +80,7 @@
            PERFORM UNTIL ACCT-EOF
                PERFORM WRITE-RECORD
                PERFORM READ-RECORD
-           END-PERFORM
-           .
+           END-PERFORM.
        READ-NEXT-RECORD-END. EXIT.
       *----
        READ-RECORD.
@@ -104,21 +104,20 @@
       *----
        DATE-HANDLE.
            MOVE ACCT-BRTHDAY TO WS-GREG-DATE
-            COMPUTE DATE-RC = FUNCTION TEST-DATE-YYYYMMDD(WS-GREG-DATE)
-            IF DATE-RC = 0
-              COMPUTE WS-INT-D = FUNCTION INTEGER-OF-DATE(ACCT-BRTHDAY)
-              COMPUTE WS-INT-T = FUNCTION INTEGER-OF-DATE(ACCT-TODAY)
-              COMPUTE PRINT-DIFF = WS-INT-T - WS-INT-D
-            ELSE
-              DISPLAY "INVALID DATE!LINE: " ACCT-SEQ
-              GO TO PROGRAM-EXIT
-      *       MOVE DATE-RC TO RETURN-CODE
-      *RETURN CODE GEREKLI MI?
-            END-IF.
-       DATE-HANDLE-EXIT. EXIT.
+           COMPUTE DATE-RC = FUNCTION TEST-DATE-YYYYMMDD(WS-GREG-DATE)
+           IF DATE-RC = 0
+            COMPUTE WS-INT-D = FUNCTION INTEGER-OF-DATE(ACCT-BRTHDAY)
+            COMPUTE WS-INT-T = FUNCTION INTEGER-OF-DATE(ACCT-TODAY)
+            COMPUTE DAY-DIFF = WS-INT-T - WS-INT-D
+           ELSE
+            DISPLAY "INVALID DATE!LINE: " ACCT-SEQ
+            MOVE 'Y' TO EXIT-FLAG
+            PERFORM PROGRAM-EXIT.
       *----
        PROGRAM-EXIT.
-           CLOSE ACCT-REC.
-           CLOSE PRINT-LINE.
-           GOBACK.
+           IF EXIT-FLAG = 'Y' THEN
+               CLOSE ACCT-REC
+               CLOSE PRINT-LINE
+               STOP RUN
+           END-IF.
       *----
