@@ -17,7 +17,7 @@
 //PRTLINE   DD DSN=&SYSUID..QSAM.ZZ,
 //            DISP=(NEW,CATLG,CATLG),
 //            SPACE=(TRK,(5,5),RLSE),
-//            DCB=(RECFM=FB,LRECL=48,BLKSIZE=0)
+//            DCB=(RECFM=FB,LRECL=67,BLKSIZE=0)
 //CEEDUMP   DD DUMMY
 //SYSUDUMP  DD DUMMY
 //***************************************************/
