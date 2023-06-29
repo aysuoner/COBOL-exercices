@@ -40,13 +40,13 @@
               10  IDX-ID    PIC 9(05) COMP-3.
               10  IDX-DVZ   PIC 9(03) COMP.
            05 IDX-FULLN     PIC X(30).
-           05 IDX-BRTHDAY   PIC 9(07) COMP-3.
+           05 IDX-JUL       PIC 9(07) COMP-3.
            05 IDX-TUTAR     PIC 9(13)V99 COMP-3.
       *****
        FD  INP-FILE RECORDING MODE F.
        01  INP-REC.
-           05 INP-ID         PIC 9(05) COMP-3.
-           05 INP-DVZ        PIC 9(03) COMP.
+           05 INP-ID        PIC 9(05) COMP-3.
+           05 INP-DVZ       PIC 9(03) COMP.
       *****
        WORKING-STORAGE SECTION.
        01  EXIT-FLAG            PIC X(01) VALUE 'N'.
@@ -57,11 +57,10 @@
               88 INP-EOF        VALUE 10.
               88 INP-SUCCESS    VALUE 00 97.
            05 IDX-ST            PIC 9(02).
-              88 IDX-EOF        VALUE 10.
               88 IDX-SUCCESS    VALUE 00 97.
        01  WS-DATE.
-           05 WS-GRE-DATE      PIC 9(08) COMP-3.
-           05 WS-INT-JUL      PIC 9(07) COMP-3.
+           05 WS-GRE-DATE       PIC 9(08) COMP-3.
+           05 WS-INT-DATE       PIC 9(07) COMP-3.
       *------------------------------
         PROCEDURE DIVISION.
       *------------------------------
@@ -110,16 +109,16 @@
        READ-IDX-FIND-KEY-END. EXIT.
       *----
        WRITE-RECORD.
-           COMPUTE WS-INT-JUL = FUNCTION INTEGER-OF-DAY(IDX-BRTHDAY)
-           COMPUTE WS-GRE-DATE = FUNCTION DATE-OF-INTEGER(WS-INT-JUL)
+           COMPUTE WS-INT-DATE = FUNCTION INTEGER-OF-DAY(IDX-JUL)
+           COMPUTE WS-GRE-DATE = FUNCTION DATE-OF-INTEGER(WS-INT-DATE)
            MOVE IDX-ID       TO PRINT-ID
            MOVE IDX-DVZ      TO PRINT-DVZ
            MOVE IDX-FULLN    TO PRINT-FULLN
            MOVE IDX-TUTAR    TO PRINT-TUTAR
            MOVE WS-GRE-DATE  TO PRINT-BRTHDAY
-           MOVE SPACES        TO SPACE-X1
-           MOVE SPACES         TO SPACE-X2
-           MOVE SPACES         TO SPACE-X3
+           MOVE SPACES       TO SPACE-X1
+           MOVE SPACES       TO SPACE-X2
+           MOVE SPACES       TO SPACE-X3
            WRITE PRINT-REC
            INITIALIZE PRINT-REC.
        WRITE-RECORD-EXIT. EXIT.
