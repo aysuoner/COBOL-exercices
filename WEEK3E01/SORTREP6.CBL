@@ -25,11 +25,11 @@
        FILE SECTION.
        FD  PRINT-LINE RECORDING MODE F.
        01  PRINT-REC.
-           05 PRINT-ID       PIC 9(05) COMP-3.
-           05 PRINT-DVZ      PIC 9(03) COMP.
+           05 PRINT-ID       PIC 9(05).
+           05 PRINT-DVZ      PIC 9(03).
            05 PRINT-FULLN    PIC X(30).
-           05 PRINT-BRTHDAY  PIC 9(08) COMP-3.
-           05 PRINT-TUTAR    PIC 9(13)V99 COMP-3.
+           05 PRINT-BRTHDAY  PIC 9(08).
+           05 PRINT-TUTAR    PIC 9(13)V99.
       *****
        FD  IDX-FILE.
        01  IDX-REC.
@@ -62,6 +62,7 @@
               88 IDX-SUCCESS    VALUE 00 97.
        01  WS-DATE.
            05 WS-GRE-DATE      PIC 9(08) COMP-3.
+	    
       *------------------------------
         PROCEDURE DIVISION.
       *------------------------------
@@ -120,7 +121,6 @@
            MOVE IDX-TUTAR    TO PRINT-TUTAR
            MOVE WS-GRE-DATE  TO PRINT-BRTHDAY
            WRITE PRINT-REC
-           DISPLAY "BULUNDUKEY: " IDX-ID IDX-DVZ.
            INITIALIZE PRINT-REC.
        WRITE-RECORD-EXIT. EXIT.
       *----
