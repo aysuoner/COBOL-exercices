@@ -4,7 +4,7 @@
        PROGRAM-ID.    SORTREP6.
        AUTHOR.        AYSU ONER.
        DATE-WRITTEN.  25/06/2023.
-       DATE-COMPILED. 28/06/2023.
+       DATE-COMPILED. 30/06/2023.
       *------------------------------
        ENVIRONMENT DIVISION.
       *------------------------------
@@ -59,8 +59,8 @@
            05 IDX-ST            PIC 9(02).
               88 IDX-SUCCESS    VALUE 00 97.
        01  WS-DATE.
-           05 WS-GRE-DATE       PIC 9(08) COMP-3.
-           05 WS-INT-DATE       PIC 9(07) COMP-3.
+           05 WS-GR-DATE       PIC 9(08) COMP-3.
+           05 WS-INT-DATE      PIC 9(07) COMP-3.
       *------------------------------
         PROCEDURE DIVISION.
       *------------------------------
@@ -71,14 +71,14 @@
        FILE-OPEN-END. EXIT.
       *-------
        FILE-OPEN-CONTROL.
-           IF NOT (PRT-SUCCESS OR INP-SUCCESS OR IDX-SUCCESS)
-              DISPLAY 'FILE CANNOT OPEN'
-              DISPLAY 'PRT-ST: ' PRT-ST
-              DISPLAY 'INP-ST: ' INP-ST
-              DISPLAY 'IDX-ST: ' IDX-ST
-              MOVE 'Y' TO EXIT-FLAG
-              MOVE 99 TO RETURN-CODE
-              PERFORM PROGRAM-EXIT
+           IF (NOT PRT-SUCCESS OR NOT INP-SUCCESS OR NOT IDX-SUCCESS)
+             DISPLAY 'FILE CANNOT OPEN'
+             DISPLAY 'PRT-ST: ' PRT-ST
+             DISPLAY 'INP-ST: ' INP-ST
+             DISPLAY 'IDX-ST: ' IDX-ST
+             MOVE 'Y' TO EXIT-FLAG
+             MOVE 99 TO RETURN-CODE
+             PERFORM PROGRAM-EXIT
            END-IF.
        FILE-OPEN-CONTROL-END. EXIT.
       *-------
@@ -104,18 +104,18 @@
            READ IDX-FILE KEY IS IDX-KEY
               INVALID KEY
                  DISPLAY "Record Undefined: " INP-ID INP-DVZ
-              NOT INVALID KEY 
+              NOT INVALID KEY
                  PERFORM WRITE-RECORD.
        READ-IDX-FIND-KEY-END. EXIT.
       *----
        WRITE-RECORD.
            COMPUTE WS-INT-DATE = FUNCTION INTEGER-OF-DAY(IDX-JUL)
-           COMPUTE WS-GRE-DATE = FUNCTION DATE-OF-INTEGER(WS-INT-DATE)
+           COMPUTE WS-GR-DATE = FUNCTION DATE-OF-INTEGER(WS-INT-DATE)
            MOVE IDX-ID       TO PRINT-ID
            MOVE IDX-DVZ      TO PRINT-DVZ
            MOVE IDX-FULLN    TO PRINT-FULLN
            MOVE IDX-TUTAR    TO PRINT-TUTAR
-           MOVE WS-GRE-DATE  TO PRINT-BRTHDAY
+           MOVE WS-GR-DATE   TO PRINT-BRTHDAY
            MOVE SPACES       TO SPACE-X1
            MOVE SPACES       TO SPACE-X2
            MOVE SPACES       TO SPACE-X3
