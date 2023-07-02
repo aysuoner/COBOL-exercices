@@ -1,10 +1,11 @@
       *-----------------------
+      * Copyright Contributors to the COBOL Programming Course
+      * SPDX-License-Identifier: CC-BY-4.0
+      *-----------------------
        IDENTIFICATION DIVISION.
       *-----------------------
        PROGRAM-ID.    CBL0001
-       AUTHOR.        AYSU ONER.
-       DATE-WRITTEN.  19/06/2023.
-       AUTHOR.        22/06/2023.
+       AUTHOR.        Otto B. Fun.
       *--------------------
        ENVIRONMENT DIVISION.
       *--------------------
@@ -28,6 +29,9 @@
            05  ACCT-NO-O      PIC X(8).
            05  ACCT-LIMIT-O   PIC $$,$$$,$$9.99.
            05  ACCT-BALANCE-O PIC $$,$$$,$$9.99.
+      * PIC $$,$$$,$$9.99 -- Alternative for PIC on chapter 7.2.3,
+      * using $ to allow values of different amounts of digits
+      * and .99 instead of v99 to allow period display on output
            05  LAST-NAME-O    PIC X(20).
            05  FIRST-NAME-O   PIC X(15).
            05  COMMENTS-O     PIC X(50).
@@ -92,3 +96,4 @@
            MOVE COMMENTS     TO  COMMENTS-O.
            WRITE PRINT-REC.
       *
+
