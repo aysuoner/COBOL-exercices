@@ -63,7 +63,7 @@
            OPEN INPUT  ACCT-REC.
            IF ACCT-SUCCESS
             OPEN OUTPUT PRINT-LINE
-             IF NOT PRT-SUCCESS   
+             IF NOT PRT-SUCCESS
               DISPLAY 'Output-File cannot be opened RC: ' PRT-ST
               MOVE 'Y' TO EXIT-FLAG
               PERFORM PROGRAM-EXIT
