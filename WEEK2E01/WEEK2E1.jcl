@@ -1,8 +1,8 @@
 //BDAYCALC JOB 1,NOTIFY=&SYSUID
 //***************************************************/
 //COBRUN   EXEC IGYWCL
-//COBOL.SYSIN  DD DSN=&SYSUID..CBL(WEEK2E1A),DISP=SHR
-//LKED.SYSLMOD DD DSN=&SYSUID..LOAD(WEEK2E1A),DISP=SHR
+//COBOL.SYSIN  DD DSN=&SYSUID..CBL(WEEK2E1),DISP=SHR
+//LKED.SYSLMOD DD DSN=&SYSUID..LOAD(WEEK2E1),DISP=SHR
 //***************************************************/
 // IF RC < 5 THEN
 //***************************************************/
