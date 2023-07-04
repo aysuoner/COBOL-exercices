@@ -16,6 +16,8 @@
                              STATUS    ACCT-ST.
       * SELECT dahili bir file-name yaratir PRINT-LINE adinda
       * ASSIGN JCL dosyasinda yazan PRTLINE ile baglanti kurar
+      * STATUS JCL'de belirtillen fiziksel dosyanin acilip-acilmama
+      * vb. hata durumlarını kontrol eder.
       *------------------------------
         DATA DIVISION.
       *------------------------------
@@ -23,6 +25,8 @@
        FD  PRINT-LINE RECORDING MODE F.
       * input dosyasi readonly oldugu icin recording mode
       * F(fixed lenght) olarak ayarlandi.
+      * FD ile belirtilen logic dosya kayitlar bilgilerinin
+      * aktarilacagi ifade edilir.
        01  PRINT-REC.
            05  PRINT-SEQ       PIC X(04).
            05  SPACE-X         PIC X(02) VALUE SPACES.
@@ -32,7 +36,7 @@
            05  SPACE-X1        PIC X(02) VALUE SPACES.
            05  PRINT-TODAY     PIC 9(08).
            05  SPACE-X2        PIC X(02) VALUE SPACES.
-           05  DAY-DIFF      PIC 9(08).
+           05  DAY-DIFF        PIC 9(08).
       *
        FD  ACCT-REC RECORDING MODE F.
        01  ACCT-FIELDS.
@@ -43,6 +47,11 @@
            05  ACCT-TODAY      PIC 9(08).
       *
        WORKING-STORAGE SECTION.
+      * cbl programinda kullanilacak genel gecer
+      * variablelarin tanımlandigi bolumdur.
+      * Flag kontrolu icin 88 conditation kullanildi (true-/false)
+      * 88'nin bagliliklari 88'nin yaninda yer alan degerlerden biri ise
+      * 88 true deger alir. değil ise 88 0 degerine sahiptir.
        01 EXIT-FLAG            PIC X(1) VALUE 'N'.
        01  FILE-FLAGS.
            05 PRT-ST           PIC 9(02).
@@ -59,6 +68,9 @@
       *------------------------------
         PROCEDURE DIVISION.
       *------------------------------
+      * dosya acma islemi ve dosya kontrolunun yapildigi yerdir.
+      * dosya acma islemi basarisiz olursa sysout dosyasına hata mesaji 
+      * yazdirilip prgoramdan cikis yapilir.
        FILE-OPEN-CONTROL.
            OPEN INPUT  ACCT-REC.
            IF ACCT-SUCCESS
@@ -75,6 +87,10 @@
            END-IF.
        FILE-OPEN-CONTROL-END. EXIT.
       *----
+      * ACCT-REC ismi ile iliskilendirilen input dosyasindaki kayitlarin
+      * dosya sonuna kadar okundugu ve her kaydin date control sonrasi
+      * PRINT-LINE ile iliskilendirilen output dosyasina yazdirildigi
+      * yerdir.
        READ-NEXT-RECORD.
            PERFORM READ-RECORD
            PERFORM UNTIL ACCT-EOF
@@ -103,6 +119,11 @@
        WRITE-RECORD-EXIT. EXIT.
       *----
        DATE-HANDLE.
+      * oncelikle valid date kontolunun yapildigi sonrasinda 
+      * integer dogum tarihinden integer today tarinin cikarilip 
+      * yasanilan gun sayisinin hesaplandigi paragraftir.
+      *invalid date durumunda sysout dosyasına hata mesaji yazdilirip
+      * programdan cikis yapilir.
            MOVE ACCT-BRTHDAY TO WS-GREG-DATE
            COMPUTE DATE-RC = FUNCTION TEST-DATE-YYYYMMDD(WS-GREG-DATE)
            IF DATE-RC = 0

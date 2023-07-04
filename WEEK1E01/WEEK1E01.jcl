@@ -14,10 +14,10 @@
 //*NEW -> .DATA.PRT adli yeni bir dosya acilacagi 
 //*CATALG -> isin basarili sonuclanirsa cataloglanacagi
 //*DELETE -> isin basariz sonuclanirsa silinecegini ifade eder.
-//*LRECL=119 -> Her bir kaydın uzunlugunun 119 oldugunu ifade eder.
+//*LRECL=119 -> Her bir kaydin uzunlugunun 119 oldugunu ifade eder.
 //*SPACE=(TRK,(5,5),RLSE) -> bu data-set icin 5 trk'lik yer acilması
 //* gerektigini yetmezse bir 5 trk'lik daha yer acilmasi gerektigini soyler
-//*,RLSE -> eger data-set icin ayrilan yer artar ise artan alanın serbest birakilmasi
+//*,RLSE -> eger data-set icin ayrilan yer artar ise artan alanin serbest birakilmasi
 //* gerektigini ifade eder.
 //DELET100  EXEC PGM=IEFBR14
 //FILE01    DD DSN=&SYSUID..DATA.RPT,
