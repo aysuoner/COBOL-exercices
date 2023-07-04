@@ -1,11 +1,8 @@
       *-----------------------
-      * Copyright Contributors to the COBOL Programming Course
-      * SPDX-License-Identifier: CC-BY-4.0
-      *-----------------------
        IDENTIFICATION DIVISION.
       *-----------------------
        PROGRAM-ID.    CBL0001
-       AUTHOR.        Otto B. Fun.
+       AUTHOR.        AYSU ONER.
       *--------------------
        ENVIRONMENT DIVISION.
       *--------------------
